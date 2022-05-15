@@ -1,0 +1,37 @@
+- name: check if ceph is deployed
+  register: ceph_conf
+  stat: 
+    path: /etc/ceph/ceph.conf
+
+- name: Cephadm bootstrap
+  when: ceph_conf.stat.exists == False
+  register: cephadm_bootstrap
+  # command: "echo cephadm --image {{ceph_image}} bootstrap --mon-ip {{ansible_ssh_host}}  --ssh-user {{ceph_user}} {{ceph_bootstrap_extra_args}}"
+  shell: "cephadm --image {{ceph_image}} bootstrap --mon-ip {{ansible_ssh_host}}  --ssh-user {{ceph_user}} {{ceph_bootstrap_extra_args}} 2>&1 | tee -a cephadm_bootstrarp_deploy_stdout.txt"
+
+
+- name: Get ceph pub to local
+  fetch:
+    src: "/etc/ceph/ceph.pub"
+    dest: "/tmp/pub-ceph-cluster.pub"
+    flat: yes
+
+
+
+
+
+# - name: copy the output to a remote file stdout
+#   # when: ceph_conf.stat.exists == False
+#   copy:
+#     content: "{{ cephadm_bootstrap.stdout }}"
+#     dest: "cephadm_bootstrarp_deploy_stdout.txt"
+
+# - name: copy the output to a remote file stderr
+#   # when: ceph_conf.stat.exists == False
+#   copy:
+#     content: "{{ cephadm_bootstrap.stderr }}"
+#     dest: "cephadm_bootstrarp_deploy_stderr.txt"
+  
+# # - name: debug hostname output
+# #   # when: ceph_conf.stat.exists == False
+# #   debug: msg="{{cephadm_bootstrap.stdout}}"

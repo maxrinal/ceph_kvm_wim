@@ -1,0 +1,67 @@
+- hosts: all
+  tags: add-google-dns
+  become: yes
+  tasks:
+  - name: Ensure google dns nameservers
+    lineinfile:
+      path: /etc/resolv.conf
+      # regexp: '^nameserver '
+      regexp: '^nameserver 127.0.0.53'
+      line: 'nameserver 8.8.8.8'
+      # insertafter: '^#Listen '
+      # line: Listen 8080
+
+
+- name: ceph Pre
+  hosts: all
+  gather_facts: yes
+  become: yes
+  roles:
+  - role: 01-pre-tasks
+
+
+- name: ceph Deploy
+  hosts: node_mons[0]
+  gather_facts: yes
+  become: yes
+  roles:
+  - role: 02-deploy
+
+
+  
+- hosts: all
+  tags: t-copy-ceph-pub
+  become: yes
+  vars:
+    ceph_user: ceph
+  tasks:
+  - name: Set authorized key taken from file
+    authorized_key:
+      user: "{{ceph_user}}"
+      state: present
+      key: "{{ lookup('file', '{{ item }}') }}"
+    with_fileglob:
+    - "/tmp/pub-ceph-cluster.pub"
+
+- name: Ceph add hosts to cluster
+  hosts: node_mons[0]
+  gather_facts: yes
+  become: yes
+  tasks:
+  - name: copy orch inventory
+    copy:
+      src: "../tmp/{{terraform_workspace}}/hosts_ceph_orch.yml"
+      dest: "/etc/ceph/hosts_ceph_orch.yml"
+  - name: Agregamos host al cluster
+    shell: "cephadm shell ceph orch apply -i /rootfs/etc/ceph/hosts_ceph_orch.yml"
+
+
+
+
+#  ANSIBLE_FORCE_COLOR=1 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ../ansible/site.yml -i ../tmp/default/hosts.yml -u vmadmin
+# –orphan-initial-daemons
+# [–skip-monitoring-stack] Do not automatically provision monitoring stack] (prometheus, grafana, alertmanager, node-exporter)
+# [–apply-spec APPLY_SPEC] Apply cluster spec after bootstrap (copy ssh key, add hosts and apply services)
+# https://docs.ceph.com/en/octopus/man/8/cephadm/
+# cephadm prepare-host
+

@@ -1,0 +1,6 @@
+docker_local_registry: 192.168.122.1:4000
+ceph_user: ceph
+cephadm_url: https://raw.githubusercontent.com/ceph/ceph/pacific/src/cephadm/cephadm
+
+# Si se cambia la version a quincy deben cambiase las imagenes tambien {{ceph_image}}
+# cephadm_url: https://raw.githubusercontent.com/ceph/ceph/quincy/src/cephadm/cephadm

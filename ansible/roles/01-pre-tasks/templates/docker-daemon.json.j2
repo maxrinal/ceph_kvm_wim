@@ -1,0 +1,15 @@
+{
+    "registry-mirrors" : [ "http://{{docker_local_registry}}" ],
+    "insecure-registries" : [ "{{docker_local_registry}}" ],
+    "experimental" : true,
+    "log-opts": {
+        "max-file": "5",
+        "max-size": "5m"
+    },
+    "default-address-pools":
+     [
+       {"base":"192.168.16.0/20","size":27}
+     ]
+
+
+}

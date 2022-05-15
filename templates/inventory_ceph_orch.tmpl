@@ -1,0 +1,68 @@
+%{ for index, curr_host in node_mon_list ~}
+---
+service_type: host
+hostname: ${curr_host.name}
+addr: ${curr_host.ipv4_addressess[0]}
+labels:
+- _admin
+- mon
+- mgr
+- alertmanager
+- grafana
+- prometheus
+%{ endfor ~}
+%{ for index, curr_host in node_osd_list ~}
+---
+service_type: host
+hostname: ${curr_host.name}
+addr: ${curr_host.ipv4_addressess[0]}
+labels:
+- osd
+%{ endfor ~}
+---
+service_type: mon
+service_name: mon
+placement:
+  count: 1
+  label: mon
+---
+service_type: mgr
+service_name: mgr
+placement:
+  count: 1
+  label: mgr
+---
+service_type: node-exporter
+service_name: node-exporter
+placement:
+  host_pattern: '*'
+---
+service_type: crash
+service_name: crash
+placement:
+  host_pattern: '*'
+---
+service_type: osd
+service_id: default_drive_group
+placement:
+  label: osd
+data_devices:
+  all: true
+---
+service_type: prometheus
+service_name: prometheus
+placement:
+  count: 1
+  label: prometheus
+---
+service_type: alertmanager
+service_name: alertmanager
+placement:
+  count: 1
+  label: alertmanager
+---
+service_type: grafana
+service_name: grafana
+placement:
+  count: 1
+  label: grafana

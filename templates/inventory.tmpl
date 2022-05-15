@@ -1,0 +1,18 @@
+[node_mons]
+%{ for index, curr_host in node_mon_list ~}
+${curr_host.name}  ansible_host=${curr_host.ipv4_addressess[0]} ansible_user=${hosts_user}
+%{ endfor ~}
+
+[node_osd]
+%{ for index, curr_host in node_osd_list ~}
+${curr_host.name}  ansible_host=${curr_host.ipv4_addressess[0]} ansible_user=${hosts_user}
+%{ endfor ~}
+
+[all:vars]
+terraform_workspace=${tf_workspace}
+
+# Evaluated Vars
+# ansible_user=${hosts_user}
+
+# Non Evaluated from xxx.auto.tfvars ansible_extra_vars,etc
+${ansible_extra_vars}

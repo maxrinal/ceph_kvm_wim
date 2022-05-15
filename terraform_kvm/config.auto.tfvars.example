@@ -1,0 +1,5 @@
+ansible_extra_vars = <<EOF
+EOF
+
+# Estas linas adicionales son requeridas ya que el HEREDOC(EOF) necesita un enter luego y muchos editores de texto trimean todos los whitespace finales
+# End of document
