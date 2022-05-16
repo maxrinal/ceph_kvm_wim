@@ -33,3 +33,5 @@ variable "ansible_extra_vars" {
 EOF
   type    = string
 }
+
+variable "EXECUTE_ANSIBLE" { default=true }

@@ -37,6 +37,8 @@ resource "local_file" "inventory_ceph_orch" {
 
 
 resource "null_resource" "execute_ansible" {
+  # Si EXECUTE_ANSIBLE es true debemos ejecutar el bloque de codigo sino no(count=0)
+  count  = (var.EXECUTE_ANSIBLE == true ? 1:0)
   depends_on = [
     module.node_mon,
     module.node_osd,
@@ -44,22 +46,16 @@ resource "null_resource" "execute_ansible" {
     resource.local_file.inventory_ceph_orch
   ]
   triggers = {
-    # always_run = timestamp()
-    # mon_ips = join(",", module.node_mon.*.ipv4_addressess[0])
-    # osd_ips = join(",", module.node_osd.*.ipv4_addressess[0])
-
     mon_count = "${var.node_mon_count}" 
     osd_count = "${var.node_osd_count}" 
     osd_disk_count = length(var.node_osd_extra_disk)
-
-    # orch_host_inventory = sha1(file("../tmp/${terraform.workspace}/hosts_ceph_orch.yml"))
-    # ansible_inventory =   sha1(file("../tmp/${terraform.workspace}/hosts.yml"))
   }
   provisioner "local-exec" {
     command = "ANSIBLE_FORCE_COLOR=1 ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook ../ansible/site.yml -i ../tmp/${terraform.workspace}/hosts.yml -u vmadmin"
-    # command = "date | tee -a /tmp/execute"
   }
 }
+
+
 
 output "ssh_conn" {
   value = <<EOT

@@ -1,5 +1,39 @@
+# Global variables
+nombre="ceph01"
+
+user_name="vmadmin"
+user_pass="Test123456"
+
+
+# Mon Node variables
+node_mon_count=1
+node_mon_cpu=2
+node_mon_memory_mb=2048
+node_mon_os_path="/home/repo/images/focal-server-cloudimg-amd64-disk-kvm.img"
+node_mon_network=["default"]
+node_mon_disk_size=10 * 1024
+node_mon_extra_disk={}
+
+
+# Mon osd variables
+node_osd_count=1
+node_osd_cpu=1
+node_osd_memory_mb=2048
+node_osd_os_path="/home/repo/images/focal-server-cloudimg-amd64-disk-kvm.img"
+node_osd_network=["default"]
+node_osd_disk_size=10 * 1024
+# node_osd_extra_disk={}
+# node_osd_extra_disk={ "disk_01" : 5, "disk_02" : 5, "disk_03" : 5, "disk_04" : 5 }
+
+# boolean true/false to execute ansible
+EXECUTE_ANSIBLE=true
+
+# Extra ansible variables
 ansible_extra_vars = <<EOF
 EOF
 
 # Estas linas adicionales son requeridas ya que el HEREDOC(EOF) necesita un enter luego y muchos editores de texto trimean todos los whitespace finales
 # End of document
+
+
+
