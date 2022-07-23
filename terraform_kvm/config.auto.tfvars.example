@@ -9,6 +9,7 @@ user_pass="Test123456"
 node_mon_count=1
 node_mon_cpu=2
 node_mon_memory_mb=2048
+# curl -LO https://cloud-images.ubuntu.com/focal/current/focal-server-cloudimg-amd64-disk-kvm.img
 node_mon_os_path="/home/repo/images/focal-server-cloudimg-amd64-disk-kvm.img"
 node_mon_network=["default"]
 node_mon_disk_size=10 * 1024

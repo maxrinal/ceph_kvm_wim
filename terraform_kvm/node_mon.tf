@@ -1,7 +1,8 @@
 module "node_mon_cloud_init" {
   count = var.node_mon_count
 
-  source = "/home/repo/tf_modules/cloud_init"
+  # source = "/home/repo/tf_modules/cloud_init"
+  source = "git::https://github.com/maxrinal/tf_modules.git//cloud_init"
 
   nombre = "${var.nombre}-mon-n0${count.index}"
 
@@ -13,7 +14,8 @@ module "node_mon_cloud_init" {
 
 
 module "node_mon" {
-  source = "/home/repo/tf_modules/kvm_complex_instance"
+  # source = "/home/repo/tf_modules/kvm_complex_instance"
+  source = "git::https://github.com/maxrinal/tf_modules.git//kvm_complex_instance"
 
   depends_on = [
     module.node_mon_cloud_init

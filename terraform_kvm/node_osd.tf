@@ -6,7 +6,8 @@
 module "node_osd_cloud_init" {
   count = var.node_osd_count
 
-  source = "/home/repo/tf_modules/cloud_init"
+  # source = "/home/repo/tf_modules/cloud_init"
+  source = "git::https://github.com/maxrinal/tf_modules.git//cloud_init"
 
   nombre = "${var.nombre}-osd-n0${count.index}"
   # nombre = "${node_osd_nombre}-n0${count.index}"
@@ -19,7 +20,8 @@ module "node_osd_cloud_init" {
 
 
 module "node_osd" {
-  source = "/home/repo/tf_modules/kvm_complex_instance"
+  # source = "/home/repo/tf_modules/kvm_complex_instance"
+  source = "git::https://github.com/maxrinal/tf_modules.git//kvm_complex_instance"
 
   depends_on = [
     module.node_osd_cloud_init
